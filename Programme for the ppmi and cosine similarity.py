@@ -27,6 +27,7 @@ def count_ppmi(target, sum_x, sum_y, sum_all, *, decimal=3):
     import math
     try:
         result = math.log2((target * sum_all) / (sum_x * sum_y))
+        # This is a simplified formula
     except ValueError:
         # if the value of target is 0, we define the result as 0
         return 0
