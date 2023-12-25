@@ -8,7 +8,7 @@ water   648     51      2
 vodka   42      6       0
 acid    11      31      4
 
-For other instance you need to rewrite the "name" in function "ppmi".
+For other instance you need to rewrite the "name" in function "ppmi_matrix".
 The length of each row vector is not limited.
 
 """
