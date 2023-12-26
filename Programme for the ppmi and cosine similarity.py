@@ -8,7 +8,7 @@ water   648     51      2
 vodka   42      6       0
 acid    11      31      4
 
-For other instance you need to rewrite the "name" in function "ppmi_matrix".
+For other instance with different nouns is this methode also available.
 The length of each row vector is not limited.
 
 """
@@ -27,7 +27,6 @@ def count_ppmi(target, sum_x, sum_y, sum_all, *, decimal=3):
     import math
     try:
         result = math.log2((target * sum_all) / (sum_x * sum_y))
-        # This is a simplified formula
     except ValueError:
         # if the value of target is 0, we define the result as 0
         return 0
@@ -46,7 +45,7 @@ def determine_value(value):
     return value
 
 
-def get_column_sum(column_number, table):
+def get_column_sum(column_number, table: list):
     """Get sum of all the elements from the table.
 
     :param column_number: form 0
@@ -61,7 +60,7 @@ def get_column_sum(column_number, table):
     return sum(list_of_column)
 
 
-def get_row_sum(raw_number, table):
+def get_row_sum(raw_number, table: list):
     """Get sum of all the elements from the table.
 
     :param raw_number:
@@ -71,7 +70,7 @@ def get_row_sum(raw_number, table):
     return sum(table[raw_number])
 
 
-def calculate_sum(matrix):
+def calculate_sum(matrix: list):
     """Calculates the sum of all the numbers in a two-dimensional list.
 
     :param matrix: the table you want to operate
@@ -84,7 +83,7 @@ def calculate_sum(matrix):
     return total
 
 
-def ppmi_matrix(matrix, *, name=None):
+def ppmi_matrix(matrix: dict, *, name=None) -> dict:
     """Form a table with corresponding value, which is calculated from ppmi algorithm.
 
     :param matrix: the word-word-matrix
@@ -92,17 +91,17 @@ def ppmi_matrix(matrix, *, name=None):
     :return: the word-word-matrix, which is modified by the ppmi algorithm
     """
     if name is None:
-        name = ["water", "vodka", "acid"]
-        # if necessary, rewrite hear to adapt it to other instances
-    sum_all = calculate_sum(matrix)
+        name = list(matrix.keys())
+    matrix_new = list(matrix.values())
+    sum_all = calculate_sum(matrix_new)
     result_all = {}
     i = 0
-    for x0 in matrix:
+    for x0 in matrix_new:
         j = 0
         result_part = []
         for x1 in x0:
-            result_part.append(determine_value(count_ppmi(x1, get_row_sum(i, matrix),
-                                                          get_column_sum(j, matrix), sum_all)))
+            result_part.append(determine_value(count_ppmi(x1, get_row_sum(i, matrix_new),
+                                                          get_column_sum(j, matrix_new), sum_all)))
             j += 1
         result_all.update({name[i]: result_part})
         i += 1
@@ -110,7 +109,7 @@ def ppmi_matrix(matrix, *, name=None):
     return result_all
 
 
-def dot_product(a, b):
+def dot_product(a: list, b: list):
     """Calculate dot product.
 
     :param a: vektor a
@@ -123,7 +122,7 @@ def dot_product(a, b):
     return result
 
 
-def vector_magnitude(vector):
+def vector_magnitude(vector: list):
     """Calculate vector magnitude.
 
     :param vector:
@@ -136,7 +135,7 @@ def vector_magnitude(vector):
     return magnitude
 
 
-def cosine_similarity(a, b):
+def cosine_similarity(a: list, b: list):
     """Calculate cosine similarity.
 
     :param a: vector a
@@ -149,8 +148,12 @@ def cosine_similarity(a, b):
 
 
 if __name__ == "__main__":
-    word_word_matrix = [[648, 51, 2], [42, 6, 0], [11, 31, 4]]
+    word_word_matrix = {"water": [648, 51, 2], "vodka": [42, 6, 0], "acid": [11, 31, 4]}
+    word_word_matrix_2 = {"water": [648, 51, 2, 3], "vodka": [42, 6, 0, 90], "acid": [11, 31, 4, 76]}
+    word_word_matrix_3 = {"water": [648, 51, 2], "vodka": [42, 6, 0], "acid": [11, 31, 4], "beer": [46, 12, 2]}
     m = ppmi_matrix(word_word_matrix)
+    m2 = ppmi_matrix(word_word_matrix_2)
+    m3 = ppmi_matrix(word_word_matrix_3)
     cosine_similarity(m["water"], m["vodka"])
     cosine_similarity(m["water"], m["acid"])
     cosine_similarity(m["acid"], m["vodka"])
